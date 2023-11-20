@@ -39,4 +39,10 @@ describe('GET /api/topics', () => {
     })
 });
 
-
+describe.only('GET /api/articles/:article_id', () => {
+    test('GET:200 sends a single article to the client', () => {
+        return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+    })
+});

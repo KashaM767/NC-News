@@ -1,5 +1,5 @@
 const { topicData } = require("../db/data/test-data/index");
-const { retrieveTopics } = require("../models/models");
+const { retrieveTopics, retrieveArticleById } = require("../models/models");
 
 
 exports.getTopics = (req, res, next) => {
@@ -8,5 +8,11 @@ exports.getTopics = (req, res, next) => {
         .catch(next)
 };
 
+exports.getArticleById = (req, res) => {
+    const { id } = req.params.article_id
+    retrieveArticleById(id).then((rows) => {
+        res.status(200).send(rows)
+    })
+}
 
 
