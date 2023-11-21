@@ -11,7 +11,7 @@ exports.getTopics = (req, res, next) => {
 exports.getArticleById = (req, res, next) => {
     const { article_id } = req.params
     retrieveArticleById(article_id).then((rows) => {
-        res.status(200).send(rows)
+        res.status(200).send({ article: rows })
     }).catch(next)
 }
 
