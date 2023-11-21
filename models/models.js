@@ -17,9 +17,12 @@ exports.readAllApis = () => {
     return fs.readFile(`${__dirname}/../endpoints.json`, 'utf-8')
         .then((data) => {
             const parsedData = JSON.parse(data);
-            console.log(parsedData)
             return parsedData;
         });
+};
+
+exports.retrieveArticles = () => {
+    return db.query("SELECT article_id, article_img_url, author, created_at, title, topic, votes FROM articles ORDER BY created_at DESC;");
 };
 
 
