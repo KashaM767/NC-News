@@ -56,12 +56,11 @@ describe.only('GET /api/articles', () => {
     test("200 returns an array of article objects sorted by date desc", () => {
         return request(app).get('/api/articles')
             .expect(200).then(({ body }) => {
-                expect(body.articles.rowCount).toBe(13);
-                console.log(body.articles.rows)
-                expect(body.articles.rows).toBeSortedBy("created_at", {
+                expect(body.length).toBe(13);
+                expect(body).toBeSortedBy("created_at", {
                     descending: true
                 });
-                body.articles.rows.forEach((article) => {
+                body.forEach((article) => {
                     expect(article).toMatchObject({
                         article_id: expect.any(Number),
                         article_img_url: expect.any(String),
@@ -73,7 +72,6 @@ describe.only('GET /api/articles', () => {
                     })
                 });
             })
-
     });
 });
 
