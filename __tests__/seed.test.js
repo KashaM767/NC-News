@@ -45,7 +45,6 @@ describe('GET /api/articles/:article_id', () => {
             .get('/api/articles/1')
             .expect(200)
             .then(({ body }) => {
-                console.log(body)
                 expect(body.article).toMatchObject(
                     {
                         article_id: 1,
