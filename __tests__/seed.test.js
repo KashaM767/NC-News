@@ -5,7 +5,6 @@ const request = require('supertest');
 
 const { articleData, commentData, topicData, userData } = require('../db/data/test-data/index');
 
-
 beforeEach(() => {
     return seed({ articleData, commentData, topicData, userData })
 });
@@ -42,11 +41,14 @@ describe('GET:404 - bad path', () => {
     })
 })
 
-describe.only('GET /api', () => {
-    test("GET:200 returns status code of 200, object containing all apis", () => {
+describe('GET /api', () => {
+    test("GET:200 returns object containing all apis", () => {
         return request(app).get('/api')
-            .expect(500).then((res) => {
-                console.log(res.body)
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.apis["GET /api/topics"]).toEqual(expect.any(Object));
+                expect(body.apis["GET /api"]).toEqual(expect.any(Object));
             })
     })
-})
+});
+
