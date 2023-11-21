@@ -8,11 +8,11 @@ exports.getTopics = (req, res, next) => {
         .catch(next)
 };
 
-exports.getArticleById = (req, res) => {
-    const { id } = req.params.article_id
-    retrieveArticleById(id).then((rows) => {
+exports.getArticleById = (req, res, next) => {
+    const { article_id } = req.params
+    retrieveArticleById(article_id).then((rows) => {
         res.status(200).send(rows)
-    })
+    }).catch(next)
 }
 
 

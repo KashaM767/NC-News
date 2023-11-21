@@ -39,10 +39,32 @@ describe('GET /api/topics', () => {
     })
 });
 
-describe.only('GET /api/articles/:article_id', () => {
+describe('GET /api/articles/:article_id', () => {
     test('GET:200 sends a single article to the client', () => {
         return request(app)
             .get('/api/articles/1')
             .expect(200)
-    })
+            .then(({ body }) => {
+                const articles = body;
+                expect(articles).toMatchObject({
+                    article_id: 1,
+                    title: 'Living in the shadow of a great man',
+                    topic: 'mitch',
+                    author: 'butter_bridge',
+                    body: 'I find this existence challenging',
+                    created_at: "2020-07-09T20:11:00.000Z",
+                    votes: 100,
+                    article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+                })
+            })
+    });
+    test("404: responds with an error message if the article_id does not exist", () => {
+        return request(app)
+            .get('/api/articles/26')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe("not found")
+            })
+    });
 });
+
