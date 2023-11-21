@@ -1,5 +1,5 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
-const { retrieveTopics, readAllApis } = require("../models/models");
+const { retrieveTopics, readAllApis, commentsByArticle } = require("../models/models");
 
 
 exports.getTopics = (req, res, next) => {
@@ -14,7 +14,19 @@ exports.listApis = (req, res, next) => {
     }).catch(next)
 };
 
+exports.listComments = (req, res, next) => {
+    const { article_id } = req.params
+    commentsByArticle(article_id).then((rows) => {
+        res.status(200).send({ rows })
+    }).catch(next)
+}
 
+// exports.getArticleById = (req, res, next) => {
+//     const { article_id } = req.params
+//     retrieveArticleById(article_id).then((rows) => {
+//         res.status(200).send({ article: rows })
+//     }).catch(next)
+// }
 
 
 
