@@ -1,6 +1,6 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById } = require("../models/models");
+const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById, insertComment } = require("../models/models");
 
 
 
@@ -39,4 +39,12 @@ exports.getArticleById = (req, res, next) => {
     }).catch(next)
 };
 
+exports.postComment = (req, res, next) => {
+    const newComment = req.body;
+    const { article_id } = req.params
+
+    insertComment(newComment, article_id).then((comment) => {
+        res.status(201).send({ comment })
+    }).catch(next)
+}
 

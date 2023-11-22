@@ -67,5 +67,19 @@
         "article_img_url": "https: //images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "add a comment for an article and responds with the posted comment",
+    "queries": [
+      "article_id"
+    ],
+    "exampleResponse": {
+      "comment_id": 19,
+      "body": "random text generating..",
+      "article_id": 4,
+      "author": "butter_bridge",
+      "votes": 0,
+      "created_at": "2023-11-22T20:43:39.934Z"
+    }
   }
 }

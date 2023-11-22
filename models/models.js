@@ -41,5 +41,14 @@ exports.commentsByArticle = (article_id) => {
 }
 
 
+exports.insertComment = (newComment, article_id) => {
 
+    const body = newComment.body;
+    const author = newComment.username
+
+    return db.query(`INSERT INTO comments (body, article_id, author) VALUES ($1, $2, $3) RETURNING *;`, [body, article_id, author])
+        .then(({ rows }) => {
+            return rows[0]
+        })
+}
 
