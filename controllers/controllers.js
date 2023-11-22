@@ -21,12 +21,7 @@ exports.listComments = (req, res, next) => {
     }).catch(next)
 }
 
-// exports.getArticleById = (req, res, next) => {
-//     const { article_id } = req.params
-//     retrieveArticleById(article_id).then((rows) => {
-//         res.status(200).send({ article: rows })
-//     }).catch(next)
-// }
+
 
 
 

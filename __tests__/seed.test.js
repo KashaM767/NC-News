@@ -53,19 +53,10 @@ describe('GET /api', () => {
 });
 
 describe('/api/articles/:article_id/comments', () => {
-    xtest("200: responds with an empty array if no comments found", () => {
-        return request(app)
-            .get('/api/articles/4/comments')
-            .expect(200)
-            .then(({ body }) => {
-                expect(body, rows).toEqual([])
-            })
-    });
     test("200: returns an array of comments for the given article_id", () => {
         return request(app).get('/api/articles/3/comments')
             .expect(200)
             .then(({ body }) => {
-                console.log(body)
                 expect(body.rows.length).toBe(2);
                 expect(body.rows[0]).toMatchObject(
                     {
