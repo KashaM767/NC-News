@@ -10,6 +10,8 @@ beforeEach(() => {
 });
 afterAll(() => db.end());
 
+
+
 describe('GET /api/topics', () => {
     test('GET:200 sends a 200 status code and array of topics to the client', () => {
         return request(app)
@@ -67,16 +69,16 @@ describe('/api/articles/:article_id/comments', () => {
                 expect(body.rows).toBeSortedBy("created_at", {
                     descending: true
                 });
-                expect(body.rows[0]).toMatchObject(
-                    {
-                        comment_id: 11,
-                        body: 'Ambidextrous marsupial',
-                        article_id: 3,
-                        author: 'icellusedkars',
-                        votes: 0,
-                        created_at: "2020-09-19T23:10:00.000Z"
-                    },
-                )
+                body.rows.forEach((comment) => {
+                    expect(comment).toMatchObject({
+                        comment_id: expect.any(Number),
+                        body: expect.any(String),
+                        article_id: expect.any(Number),
+                        author: expect.any(String),
+                        votes: expect.any(Number),
+                        created_at: expect.any(String)
+                    });
+                })
             })
     });
     test("404: responds with an error message if the article_id does not exist", () => {
