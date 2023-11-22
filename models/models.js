@@ -1,4 +1,13 @@
 const db = require('../db/connection');
+const fs = require('fs/promises');
+
+exports.selectApis = () => {
+    return fs.readFile('./endpoints.json', 'utf-8')
+        .then((data) => {
+            const parsedData = JSON.parse(data);
+            return parsedData;
+        });
+};
 
 
 exports.retrieveTopics = () => {
@@ -14,3 +23,15 @@ exports.retrieveArticleById = (article_id) => {
             return rows[0]
         })
 }
+exports.readAllApis = () => {
+    return fs.readFile(`${__dirname}/../endpoints.json`, 'utf-8')
+        .then((data) => {
+            const parsedData = JSON.parse(data);
+            console.log(parsedData)
+            return parsedData;
+        });
+};
+
+
+
+
