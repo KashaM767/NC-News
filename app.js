@@ -1,6 +1,6 @@
 const express = require("express");
 const { getTopics, listApis, listComments } = require("./controllers/controllers");
-
+const { handleSqlErrors, handleCustomErrors, handleServerErrors } = require("./errors");
 
 const app = express();
 app.use(express.json());
@@ -15,16 +15,9 @@ app.all("*", (req, res) => {
     res.status(404).send({ msg: "path not found" });
 });
 
-app.use((err, req, res, next) => {
-    if (err.code === "22P02") {
-        res.status(400).send({ msg: "bad request" });
-    } else if (err.status) {
-        res.status(err.status).send({ msg: err.msg });
-    } else {
-        res.status(500).send({ msg: "internal server error" });
-    }
-})
-
+app.use(handleSqlErrors);
+app.use(handleCustomErrors);
+app.use(handleServerErrors);
 
 
 module.exports = app;

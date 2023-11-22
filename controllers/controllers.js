@@ -1,4 +1,5 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
+const { checkExists } = require("../models/comments");
 const { retrieveTopics, readAllApis, commentsByArticle } = require("../models/models");
 
 
@@ -16,12 +17,20 @@ exports.listApis = (req, res, next) => {
 
 exports.listComments = (req, res, next) => {
     const { article_id } = req.params
-    commentsByArticle(article_id).then((rows) => {
-        res.status(200).send({ rows })
-    }).catch(next)
+    console.log(article_id)
+    const articlePromises = [commentsByArticle(article_id)];
+
+    if (article_id) {
+        articlePromises.push(checkExists(article_id));
+    }
+
+    Promise.all(articlePromises)
+        .then((resolvedPromises) => {
+            const rows = resolvedPromises[0]
+            res.status(200).send({ rows });
+        })
+        .catch(next);
 }
-
-
 
 
 

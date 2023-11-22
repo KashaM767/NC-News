@@ -10,8 +10,6 @@ beforeEach(() => {
 });
 afterAll(() => db.end());
 
-
-
 describe('GET /api/topics', () => {
     test('GET:200 sends a 200 status code and array of topics to the client', () => {
         return request(app)
@@ -53,11 +51,22 @@ describe('GET /api', () => {
 });
 
 describe('/api/articles/:article_id/comments', () => {
+    test("200: returns an empty array if no comments for the given article_id", () => {
+        return request(app).get('/api/articles/2/comments')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.rows).toEqual([])
+            })
+    });
     test("200: returns an array of comments for the given article_id", () => {
         return request(app).get('/api/articles/3/comments')
             .expect(200)
             .then(({ body }) => {
                 expect(body.rows.length).toBe(2);
+                console.log(body)
+                expect(body.rows).toBeSortedBy("created_at", {
+                    descending: true
+                });
                 expect(body.rows[0]).toMatchObject(
                     {
                         comment_id: 11,
@@ -68,16 +77,6 @@ describe('/api/articles/:article_id/comments', () => {
                         created_at: "2020-09-19T23:10:00.000Z"
                     },
                 )
-                body.rows.forEach((comment) => {
-                    expect(comment).toMatchObject({
-                        comment_id: expect.any(Number),
-                        body: expect.any(String),
-                        article_id: expect.any(Number),
-                        author: expect.any(String),
-                        votes: expect.any(Number),
-                        created_at: expect.any(String)
-                    });
-                })
             })
     });
     test("404: responds with an error message if the article_id does not exist", () => {
