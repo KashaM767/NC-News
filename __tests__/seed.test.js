@@ -65,7 +65,6 @@ describe('/api/articles/:article_id/comments', () => {
             .expect(200)
             .then(({ body }) => {
                 expect(body.rows.length).toBe(2);
-                console.log(body)
                 expect(body.rows).toBeSortedBy("created_at", {
                     descending: true
                 });

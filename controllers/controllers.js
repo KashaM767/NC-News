@@ -17,7 +17,6 @@ exports.listApis = (req, res, next) => {
 
 exports.listComments = (req, res, next) => {
     const { article_id } = req.params
-    console.log(article_id)
     const articlePromises = [commentsByArticle(article_id)];
 
     if (article_id) {
