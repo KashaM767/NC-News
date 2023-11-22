@@ -1,7 +1,5 @@
 const db = require('../db/connection');
 const fs = require('fs/promises');
-const format = require("pg-format");
-
 
 exports.selectApis = () => {
     return fs.readFile('./endpoints.json', 'utf-8')
@@ -33,9 +31,13 @@ exports.articleComments = () => {
     })
 };
 
-exports.countComments = () => {
-    return db.query("SELECT article_id, count(*) from comments group by article_id;")
+exports.lookupObj = () => {
+    return db.query("SELECT article_id, count(*) from comments group by article_id;").then(({ rows }) => {
+        const lookup = rows
+        return lookup
+    })
 }
+
 
 
 
