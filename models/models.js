@@ -34,6 +34,11 @@ exports.readAllApis = () => {
         });
 };
 
+exports.retrieveArticles = () => {
+    return db.query("select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, count(c.body) as comment_count from articles a left outer join comments c on c.article_id = a.article_id group by a.article_id order by a.created_at desc;").then(({ rows }) => {
+        return rows
+    })
+};
 exports.commentsByArticle = (article_id) => {
     return db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`, [article_id])
         .then(({ rows }) => {

@@ -50,6 +50,31 @@ describe('GET /api', () => {
     })
 });
 
+describe('GET /api/articles', () => {
+    test("200 returns an array of article objects sorted by date desc", () => {
+        return request(app).get('/api/articles')
+            .expect(200).then(({ body }) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("created_at", {
+                    descending: true
+                });
+                expect(body.articles[0].comment_count).toBe("2")
+                body.articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        article_id: expect.any(Number),
+                        article_img_url: expect.any(String),
+                        author: expect.any(String),
+                        created_at: expect.any(String),
+                        title: expect.any(String),
+                        topic: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(String)
+                    })
+                });
+            });
+    });
+});
+
 describe('GET /api/articles/:article_id', () => {
     test('GET:200 sends a single article to the client', () => {
         return request(app)
@@ -218,7 +243,6 @@ describe('GET /api/users', () => {
                         avatar_url: expect.any(String)
                     })
                 })
-            })
+            });
     });
-});
-
+})

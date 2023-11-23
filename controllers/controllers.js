@@ -1,6 +1,6 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment } = require("../models/models");
+const { retrieveTopics, readAllApis, retrieveArticles, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
@@ -11,6 +11,12 @@ exports.getTopics = (req, res, next) => {
 exports.listApis = (req, res, next) => {
     readAllApis().then((apis) => {
         res.status(200).send({ apis })
+    }).catch(next)
+};
+
+exports.getArticles = (req, res, next) => {
+    retrieveArticles().then((rows) => {
+        res.status(200).send({ articles: rows })
     }).catch(next)
 };
 

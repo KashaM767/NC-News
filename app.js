@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTopics, listApis, listComments, getArticleById, updateArticleById, getUsers, deleteComment } = require("./controllers/controllers");
+const { getTopics, listApis, getArticles, listComments, getArticleById, updateArticleById, getUsers, deleteComment } = require("./controllers/controllers");
 const { handleSqlErrors, handleCustomErrors, handleServerErrors } = require("./errors");
 
 const app = express();
@@ -10,6 +10,8 @@ app.get('/api/topics', getTopics)
 app.get('/api/articles/:article_id', getArticleById)
 
 app.get('/api', listApis)
+
+app.get('/api/articles', getArticles)
 
 app.get('/api/articles/:article_id/comments', listComments)
 
