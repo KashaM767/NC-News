@@ -149,3 +149,59 @@ describe('/api/comments/:comment_id', () => {
             })
     });
 });
+describe('PATCH /api/articles/:article_id', () => {
+    test("200 update an article by article_id and responds with the updated article ", () => {
+        const input = {
+            inc_votes: 10
+        };
+        return request(app).patch('/api/articles/1')
+            .expect(200)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.article.votes).toEqual(110)
+            })
+    });
+    test("200 can increase and decrease an article's vote total by article_id and responds with the updated article ", () => {
+        const input = {
+            inc_votes: -30
+        };
+        return request(app).patch('/api/articles/1')
+            .expect(200)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.article.votes).toEqual(70)
+            })
+    });
+    test('404 returns an error message if article_id is valid but not found', () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/articles/44')
+            .expect(404)
+            .send(input)
+            .then((res) => {
+                expect(res.body.msg).toBe('not found');
+            })
+    })
+    test('400 returns an err msg if article_id is invalid', () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/articles/banana')
+            .expect(400)
+            .send(input)
+            .then((res) => {
+                expect(res.body.msg).toBe('bad request');
+            })
+    })
+    test('400 for invalid inc_votes value', () => {
+        const input = { inc_votes: 'banana' };
+        return request(app).patch('/api/articles/3')
+            .expect(400)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.msg).toBe("bad request");
+            });
+    });
+
+});

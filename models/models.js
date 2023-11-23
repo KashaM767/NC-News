@@ -1,6 +1,7 @@
 const db = require('../db/connection');
 const fs = require('fs/promises');
 const { checkExists } = require('./comments');
+const articles = require('../db/data/test-data/articles');
 
 
 exports.selectApis = () => {
@@ -43,6 +44,19 @@ exports.commentsByArticle = (article_id) => {
 exports.removeComment = (comment_id) => {
     return db.query("DELETE FROM comments WHERE comment_id = $1", [comment_id])
 }
+
+exports.updateArticle = (article_id, input) => {
+    const alterVotes = Object.values(input)[0]
+    return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [alterVotes, article_id])
+        .then(({ rows }) => {
+            if (!rows.length) {
+                return Promise.reject({ status: 404, msg: 'not found' });
+            }
+            return rows[0]
+        })
+}
+
+
 
 
 
