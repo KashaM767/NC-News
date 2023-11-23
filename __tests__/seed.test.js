@@ -154,6 +154,90 @@ describe('/api/articles/:article_id/comments', () => {
     });
 });
 
+describe('POST /api/articles/:article_id/comments', () => {
+    test('201: add a comment for an article and responds with the posted comment', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'random text generating..'
+        };
+        return request(app)
+            .post('/api/articles/4/comments')
+            .send(newComment)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.comment.comment_id).toBe(19);
+                expect(body.comment.body).toBe('random text generating..');
+                expect(body.comment.article_id).toBe(4);
+                expect(body.comment.author).toBe('butter_bridge');
+                expect(body.comment.votes).toBe(0);
+                expect(body.comment.created_at).toEqual(expect.any(String));
+            })
+    });
+    test('201: Ignores any unnecessary properties on the request body.', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'random text generating..',
+            pets: 'Kobi'
+        };
+        return request(app)
+            .post('/api/articles/4/comments')
+            .send(newComment)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.comment.comment_id).toBe(19);
+                expect(body.comment.body).toBe('random text generating..');
+                expect(body.comment.article_id).toBe(4);
+                expect(body.comment.author).toBe('butter_bridge');
+                expect(body.comment.votes).toBe(0);
+                expect(body.comment.created_at).toEqual(expect.any(String));
+            })
+    });
+    test('400 responds with an appropriate status and error message when missing required field', () => {
+        const newComment = {
+            body: 'random text...'
+        };
+        return request(app)
+            .post('/api/articles/4/comments')
+            .send(newComment)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe('bad request');
+            });
+    });
+    test('400: responds with an error message if passed an invalid article_id', () => {
+        return request(app)
+            .post('/api/articles/banana/comments')
+            .expect(400).then(({ body }) => {
+                expect(body.msg).toBe('bad request');
+            })
+    });
+    test('404: responds with an error message if article_id does not exist', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'random text generating..'
+        };
+        return request(app)
+            .post('/api/articles/62/comments')
+            .send(newComment)
+            .expect(404).then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
+    test('404: responds with an error message if username does not exist', () => {
+        const newComment = {
+            username: 'ParrotFish',
+            body: 'random text generating..'
+        };
+        return request(app)
+            .post('/api/articles/3/comments')
+            .send(newComment)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
+});
+
 describe('/api/comments/:comment_id', () => {
     test('204: deletes requested comment by comment_id returns 204', () => {
         return request(app).delete('/api/comments/5')

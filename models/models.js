@@ -50,6 +50,16 @@ exports.removeComment = (comment_id) => {
     return db.query("DELETE FROM comments WHERE comment_id = $1", [comment_id])
 }
 
+exports.insertComment = (newComment, article_id) => {
+
+    const body = newComment.body;
+    const author = newComment.username
+
+    return db.query(`INSERT INTO comments (body, article_id, author) VALUES ($1, $2, $3) RETURNING *;`, [body, article_id, author])
+        .then(({ rows }) => {
+            return rows[0]
+        })
+}
 exports.updateArticle = (article_id, input) => {
     const alterVotes = Object.values(input)[0]
     return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [alterVotes, article_id])

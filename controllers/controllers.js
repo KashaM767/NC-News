@@ -1,6 +1,6 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, retrieveArticles, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment } = require("../models/models");
+const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
@@ -43,6 +43,14 @@ exports.getArticleById = (req, res, next) => {
     }).catch(next)
 };
 
+exports.postComment = (req, res, next) => {
+    const newComment = req.body;
+    const { article_id } = req.params
+    insertComment(newComment, article_id).then((comment) => {
+        res.status(201).send({ comment })
+    }).catch(next)
+}
+
 exports.deleteComment = (req, res, next) => {
     const { comment_id } = req.params;
     removeComment(comment_id).then((comment) => {
@@ -63,6 +71,6 @@ exports.updateArticleById = (req, res, next) => {
 exports.getUsers = (req, res, next) => {
     retrieveUsers().then((rows) => {
         res.status(200).send({ users: rows })
-    }).catch(next)
-}
+    })
+};
 
