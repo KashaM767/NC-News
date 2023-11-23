@@ -68,6 +68,11 @@
       }
     }
   },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes comment by comment_id returns status 204 and no content",
+    "queries": [],
+    "exampleResponse": {}
+  },
   "PATCH /api/articles/:article_id": {
     "description": "updates an article by article_id and returns updated article",
     "queries": [
