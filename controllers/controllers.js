@@ -1,6 +1,6 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById } = require("../models/models");
+const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById, removeComment } = require("../models/models");
 
 
 
@@ -39,4 +39,13 @@ exports.getArticleById = (req, res, next) => {
     }).catch(next)
 };
 
-
+exports.deleteComment = (req, res, next) => {
+    const { comment_id } = req.params;
+    removeComment(comment_id).then((comment) => {
+        if (comment.rowCount === 0) {
+            res.status(404).send({ msg: 'not found' })
+        } else {
+            res.status(204).send()
+        }
+    }).catch(next)
+}

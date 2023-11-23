@@ -128,3 +128,24 @@ describe('/api/articles/:article_id/comments', () => {
             })
     });
 });
+
+describe('/api/comments/:comment_id', () => {
+    test('204: deletes requested comment by comment_id returns 204', () => {
+        return request(app).delete('/api/comments/5')
+            .expect(204)
+    });
+    test('404: returns an error message if comment_id is valid but not found', () => {
+        return request(app).delete('/api/comments/77')
+            .expect(404)
+            .then((res) => {
+                expect(res.body.msg).toBe('not found');
+            })
+    });
+    test('400 returns an error message if comment_id is invalid', () => {
+        return request(app).delete('/api/comments/banana')
+            .expect(400)
+            .then((res) => {
+                expect(res.body.msg).toBe('bad request');
+            })
+    });
+});
