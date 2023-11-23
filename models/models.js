@@ -52,7 +52,7 @@ exports.updateArticle = (article_id, input) => {
         })
 }
 
-
-
-
+exports.retrieveUsers = () => {
+    return db.query("SELECT * FROM users;");
+};
 

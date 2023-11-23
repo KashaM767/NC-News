@@ -1,6 +1,6 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById, updateArticle } = require("../models/models");
+const { retrieveTopics, readAllApis, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers } = require("../models/models");
 
 
 
@@ -45,4 +45,10 @@ exports.updateArticleById = (req, res, next) => {
         res.status(200).send({ article: rows })
     }).catch(next)
 };
+
+exports.getUsers = (req, res, next) => {
+    retrieveUsers().then((rows) => {
+        res.status(200).send({ users: rows })
+    }).catch(next)
+}
 
