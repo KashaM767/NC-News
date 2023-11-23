@@ -213,7 +213,3 @@ describe('POST /api/articles/:article_id/comments', () => {
     });
 });
 
-// Status 201: Created
-// - Ignores any unnecessary properties on the request body.
-// Status 404: Not found, username does not exist
-// - Responds with error object including status and message.
