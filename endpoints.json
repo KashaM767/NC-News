@@ -69,7 +69,7 @@
     }
   },
   "DELETE /api/comments/:comment_id": {
-    "description": "deletes omment by comment_id returns status 204 and no content",
+    "description": "deletes comment by comment_id returns status 204 and no content",
     "queries": [],
     "exampleResponse": {}
   },
