@@ -55,16 +55,4 @@ exports.updateArticle = (article_id, input) => {
 
 
 
-// exports.updateTreasure = (treasure_id, input) => {
-//     const { cost_at_auction } = input;
-//     console.log(input, treasure_id)
-//     return db.query("UPDATE treasures SET cost_at_auction = $1 WHERE treasure_id = $2 RETURNING *;", [cost_at_auction, treasure_id]).then(({ rows }) => {
-//         if (!rows.length) {
-//             return Promise.reject({ status: 404, msg: 'not found' });
-//         }
-//         return rows[0];
-//     })
-// }
-
-
 

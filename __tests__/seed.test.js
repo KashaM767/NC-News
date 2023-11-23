@@ -131,9 +131,6 @@ describe('/api/articles/:article_id/comments', () => {
 
 describe('PATCH /api/articles/:article_id', () => {
     test("200 update an article by article_id and responds with the updated article ", () => {
-        const fieldToAlter = {
-            votes: 100
-        }
         const input = {
             inc_votes: 10
         };
@@ -145,9 +142,6 @@ describe('PATCH /api/articles/:article_id', () => {
             })
     });
     test("200 can increase and decrease an article's vote total by article_id and responds with the updated article ", () => {
-        const fieldToAlter = {
-            votes: 100
-        }
         const input = {
             inc_votes: -30
         };
