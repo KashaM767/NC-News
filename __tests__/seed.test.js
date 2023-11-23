@@ -130,10 +130,29 @@ describe('/api/articles/:article_id/comments', () => {
 });
 
 describe('POST /api/articles/:article_id/comments', () => {
-    test('201: add a comment for an article and respod with the posted comment', () => {
+    test('201: add a comment for an article and responds with the posted comment', () => {
         const newComment = {
             username: 'butter_bridge',
             body: 'random text generating..'
+        };
+        return request(app)
+            .post('/api/articles/4/comments')
+            .send(newComment)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.comment.comment_id).toBe(19);
+                expect(body.comment.body).toBe('random text generating..');
+                expect(body.comment.article_id).toBe(4);
+                expect(body.comment.author).toBe('butter_bridge');
+                expect(body.comment.votes).toBe(0);
+                expect(body.comment.created_at).toEqual(expect.any(String));
+            })
+    });
+    test('201: Ignores any unnecessary properties on the request body.', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'random text generating..',
+            pets: 'Kobi'
         };
         return request(app)
             .post('/api/articles/4/comments')
@@ -167,6 +186,34 @@ describe('POST /api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe('bad request');
             })
     });
+    test('404: responds with an error message if article_id does not exist', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: 'random text generating..'
+        };
+        return request(app)
+            .post('/api/articles/62/comments')
+            .send(newComment)
+            .expect(404).then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
+    test('404: responds with an error message if username does not exist', () => {
+        const newComment = {
+            username: 'ParrotFish',
+            body: 'random text generating..'
+        };
+        return request(app)
+            .post('/api/articles/3/comments')
+            .send(newComment)
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
 });
 
-
+// Status 201: Created
+// - Ignores any unnecessary properties on the request body.
+// Status 404: Not found, username does not exist
+// - Responds with error object including status and message.
