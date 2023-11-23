@@ -22,23 +22,10 @@ exports.readAllApis = () => {
 };
 
 exports.retrieveArticles = () => {
-    return db.query("SELECT article_id, article_img_url, author, created_at, title, topic, votes FROM articles ORDER BY created_at DESC;");
-};
-
-exports.articleComments = () => {
-    return db.query("select count(*) from comments join articles on comments.article_id = articles.article_id group by articles.article_id order by articles.created_at desc;").then(({ rows }) => {
+    return db.query("select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, count(c.body) as comment_count from articles a left outer join comments c on c.article_id = a.article_id group by a.article_id order by a.created_at desc;").then(({ rows }) => {
         return rows
     })
 };
-
-exports.lookupObj = () => {
-    return db.query("SELECT article_id, count(*) from comments group by article_id;").then(({ rows }) => {
-        const lookup = rows
-        return lookup
-    })
-}
-
-
 
 
 

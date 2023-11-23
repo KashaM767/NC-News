@@ -1,5 +1,5 @@
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
-const { retrieveTopics, readAllApis, retrieveArticles, makeLookUp, lookupObj } = require("../models/models");
+const { retrieveTopics, readAllApis, retrieveArticles } = require("../models/models");
 
 
 exports.getTopics = (req, res, next) => {
@@ -15,26 +15,17 @@ exports.listApis = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-    return retrieveArticles()
-        .then((articles) => {
-            const lookup = {
-                9: 2,
-                3: 2,
-                5: 2,
-                6: 1,
-                1: 11
-            }
-
-            for (let article of articles.rows) {
-                if (article.article_id in lookup) {
-                    article.comment_count = lookup[article.article_id]
-                } else {
-                    article.comment_count = 0
-                }
-            }
-            res.status(200).send(articles.rows)
-        }).catch(next)
+    retrieveArticles().then((rows) => {
+        res.status(200).send({ articles: rows })
+    }).catch(next)
 };
+
+
+
+
+
+
+
 
 
 
