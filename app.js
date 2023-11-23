@@ -1,5 +1,5 @@
 const express = require("express");
-const { getTopics, listApis, listComments, getArticleById, postComment } = require("./controllers/controllers");
+const { getTopics, listApis, getArticles, listComments, getArticleById, updateArticleById, getUsers, postComment, deleteComment } = require("./controllers/controllers");
 const { handleSqlErrors, handleCustomErrors, handleServerErrors } = require("./errors");
 
 const app = express();
@@ -11,9 +11,17 @@ app.get('/api/articles/:article_id', getArticleById)
 
 app.get('/api', listApis)
 
+app.get('/api/articles', getArticles)
+
 app.get('/api/articles/:article_id/comments', listComments)
 
 app.post('/api/articles/:article_id/comments', postComment)
+
+app.delete('/api/comments/:comment_id', deleteComment)
+
+app.patch('/api/articles/:article_id', updateArticleById)
+
+app.get('/api/users', getUsers)
 
 app.all("*", (req, res) => {
     res.status(404).send({ msg: "path not found" });

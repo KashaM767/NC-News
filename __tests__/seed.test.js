@@ -50,6 +50,31 @@ describe('GET /api', () => {
     })
 });
 
+describe('GET /api/articles', () => {
+    test("200 returns an array of article objects sorted by date desc", () => {
+        return request(app).get('/api/articles')
+            .expect(200).then(({ body }) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("created_at", {
+                    descending: true
+                });
+                expect(body.articles[0].comment_count).toBe("2")
+                body.articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        article_id: expect.any(Number),
+                        article_img_url: expect.any(String),
+                        author: expect.any(String),
+                        created_at: expect.any(String),
+                        title: expect.any(String),
+                        topic: expect.any(String),
+                        votes: expect.any(Number),
+                        comment_count: expect.any(String)
+                    })
+                });
+            });
+    });
+});
+
 describe('GET /api/articles/:article_id', () => {
     test('GET:200 sends a single article to the client', () => {
         return request(app)
@@ -213,3 +238,95 @@ describe('POST /api/articles/:article_id/comments', () => {
     });
 });
 
+describe('/api/comments/:comment_id', () => {
+    test('204: deletes requested comment by comment_id returns 204', () => {
+        return request(app).delete('/api/comments/5')
+            .expect(204)
+    });
+    test('404: returns an error message if comment_id is valid but not found', () => {
+        return request(app).delete('/api/comments/77')
+            .expect(404)
+            .then((res) => {
+                expect(res.body.msg).toBe('not found');
+            })
+    });
+    test('400 returns an error message if comment_id is invalid', () => {
+        return request(app).delete('/api/comments/banana')
+            .expect(400)
+            .then((res) => {
+                expect(res.body.msg).toBe('bad request');
+            })
+    });
+});
+describe('PATCH /api/articles/:article_id', () => {
+    test("200 update an article by article_id and responds with the updated article ", () => {
+        const input = {
+            inc_votes: 10
+        };
+        return request(app).patch('/api/articles/1')
+            .expect(200)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.article.votes).toEqual(110)
+            })
+    });
+    test("200 can increase and decrease an article's vote total by article_id and responds with the updated article ", () => {
+        const input = {
+            inc_votes: -30
+        };
+        return request(app).patch('/api/articles/1')
+            .expect(200)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.article.votes).toEqual(70)
+            })
+    });
+    test('404 returns an error message if article_id is valid but not found', () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/articles/44')
+            .expect(404)
+            .send(input)
+            .then((res) => {
+                expect(res.body.msg).toBe('not found');
+            })
+    })
+    test('400 returns an err msg if article_id is invalid', () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/articles/banana')
+            .expect(400)
+            .send(input)
+            .then((res) => {
+                expect(res.body.msg).toBe('bad request');
+            })
+    })
+    test('400 for invalid inc_votes value', () => {
+        const input = { inc_votes: 'banana' };
+        return request(app).patch('/api/articles/3')
+            .expect(400)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.msg).toBe("bad request");
+            });
+    });
+});
+
+describe('GET /api/users', () => {
+    test('200: gets all users returns an array of objects', () => {
+        return request(app).get('/api/users')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.users.rows.length).toBe(4);
+                body.users.rows.forEach((user) => {
+                    expect(user).toMatchObject({
+                        username: expect.any(String),
+                        name: expect.any(String),
+                        avatar_url: expect.any(String)
+                    })
+                })
+            });
+    });
+})
