@@ -40,7 +40,7 @@ exports.listComments = (req, res, next) => {
     Promise.all(articlePromises)
         .then((resolvedPromises) => {
             const rows = resolvedPromises[0]
-            res.status(200).send({ rows });
+            res.status(200).send({ comments: rows });
         })
         .catch(next);
 }

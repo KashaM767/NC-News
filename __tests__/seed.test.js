@@ -10,7 +10,7 @@ beforeEach(() => {
 });
 afterAll(() => db.end());
 
-describe.only('GET /api/topics', () => {
+describe('GET /api/topics', () => {
     test('GET:200 sends a 200 status code and array of topics to the client', () => {
 
         return request(app)
@@ -160,18 +160,19 @@ describe('GET /api/articles/:article_id/comments', () => {
         return request(app).get('/api/articles/2/comments')
             .expect(200)
             .then(({ body }) => {
-                expect(body.rows).toEqual([])
+                expect(body.comments).toEqual([])
             })
     });
     test("200: returns an array of comments for the given article_id", () => {
         return request(app).get('/api/articles/3/comments')
             .expect(200)
             .then(({ body }) => {
-                expect(body.rows.length).toBe(2);
-                expect(body.rows).toBeSortedBy("created_at", {
+                console.log(body)
+                expect(body.comments.length).toBe(2);
+                expect(body.comments).toBeSortedBy("created_at", {
                     descending: true
                 });
-                body.rows.forEach((comment) => {
+                body.comments.forEach((comment) => {
                     expect(comment).toMatchObject({
                         comment_id: expect.any(Number),
                         body: expect.any(String),
