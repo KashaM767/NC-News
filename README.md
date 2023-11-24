@@ -14,8 +14,8 @@ Your database will be PSQL, this will be interacted with using node-postgres.
 
 #### Creating .env files ####
 You will need to create two .env files for your project: .env.test and .env.development. 
-<br>Into .env.test add PGDATABASE=nc_news_test
-<br>Into .env.development add PGDATABASE=nc_news
+- Into .env.test add PGDATABASE=nc_news_test
+- Into .env.development add PGDATABASE=nc_news
 
 __Please ensure that .env files are .gitignored__
 
