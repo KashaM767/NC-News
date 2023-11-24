@@ -10,17 +10,21 @@ beforeEach(() => {
 });
 afterAll(() => db.end());
 
-describe('GET /api/topics', () => {
+describe.only('GET /api/topics', () => {
     test('GET:200 sends a 200 status code and array of topics to the client', () => {
+
         return request(app)
+
             .get('/api/topics')
+
             .expect(200).then(({ body }) => {
-                expect(body.topics.rows.length).toBe(3);
-                expect(body.topics.rows[0]).toMatchObject({
+                console.log(body)
+                expect(body.topics.length).toBe(3);
+                expect(body.topics[0]).toMatchObject({
                     slug: 'mitch',
                     description: 'The man, the Mitch, the legend'
                 });
-                body.topics.rows.forEach((topic) => {
+                body.topics.forEach((topic) => {
                     expect(topic).toMatchObject({
                         slug: expect.any(String),
                         description: expect.any(String)

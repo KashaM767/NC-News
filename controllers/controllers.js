@@ -5,7 +5,7 @@ const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsBy
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
-        .then((topics) => res.status(200).send({ topics }))
+        .then((rows) => res.status(200).send({ topics: rows }))
         .catch(next)
 };
 

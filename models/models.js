@@ -14,7 +14,9 @@ exports.selectApis = () => {
 
 
 exports.retrieveTopics = () => {
-    return db.query("SELECT * FROM topics;");
+    return db.query("SELECT * FROM topics;").then(({ rows }) => {
+        return rows
+    })
 };
 
 exports.retrieveArticleById = (article_id) => {
