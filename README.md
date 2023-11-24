@@ -10,7 +10,7 @@ https://smarticles.onrender.com/api/articles/
 
 To replicate this project:
 
-Your database will be PSQL, and you will interact with it using node-postgres.
+Your database will be PSQL, this will be interacted with using node-postgres.
 
 #### Creating .env files ####
 You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=, with the relevent database name for that environment. Please ensure that these .env files are .gitignored. 
@@ -21,9 +21,33 @@ This project requires several node dependicies listed in the package-lock.json/p
 We'll have two databases in this project: one for development data, and another for simpler test data.
 Seeding data is provided:
 run setup.sql file to create the databases 
- `code(- psql -f ./db/setup.sql)`
+\ - psql -f ./db/setup.sql
 run run-seed.js 
- `code(node ./db/seeds/run-seed.js)`
+\ node ./db/seeds/run-seed.js
 
 The developer database should be populated at the start.
 The test database should be set up to reseed before each test is run.
+
+#### Running Tests ####
+This project uses jest, jest-sorted and supertest for testing. 
+Packages will be installed as dev dependencies.
+
+npm install --save-dev jest
+npm install --save-dev jest-sorted
+npm install supertest --save-dev
+
+package.json file
+jest-sorted should be added to the package.json file
+test should also be set to jest in scripts
+
+```json 
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-sorted"
+    ]
+  }
+```
+
+```json
+ "test": "jest",
+```
