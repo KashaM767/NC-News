@@ -58,7 +58,7 @@ describe('GET /api/articles', () => {
                 expect(body.articles).toBeSortedBy("created_at", {
                     descending: true
                 });
-                expect(body.articles[0].comment_count).toBe("2")
+                expect(body.articles[0].comment_count).toBe(2)
                 body.articles.forEach((article) => {
                     expect(article).toMatchObject({
                         article_id: expect.any(Number),
@@ -68,7 +68,7 @@ describe('GET /api/articles', () => {
                         title: expect.any(String),
                         topic: expect.any(String),
                         votes: expect.any(Number),
-                        comment_count: expect.any(String)
+                        comment_count: expect.any(Number)
                     })
                 });
             });
