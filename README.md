@@ -13,7 +13,9 @@ To replicate this project:
 Your database will be PSQL, this will be interacted with using node-postgres.
 
 #### Creating .env files ####
-You will need to create two .env files for your project: .env.test and .env.development. Into each, add PGDATABASE=, with the relevent database name for that environment. Please ensure that these .env files are .gitignored. 
+You will need to create two .env files for your project: .env.test and .env.development. Into each, 
+- add PGDATABASE=<> 
+- with the relevent database name for that environment. __Please ensure that these .env files are .gitignored.__ 
 
 This project requires several node dependicies listed in the package-lock.json/package.json files. After the env files are created run npm install.
 
@@ -51,9 +53,9 @@ test should also be set to jest in scripts
 ```json
  "test": "jest",
 ```
-Tests can be ran by running npm t seed
+Tests can be ran by running npm t seed.
 
 #### Minimum Versions Needed ####
 This project requires:
-8.11.3 and upwards for postgres
-6.0.0 and upwards for node
+- 8.11.3 and upwards for postgres.
+- 6.0.0 and upwards for node.
