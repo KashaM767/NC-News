@@ -14,19 +14,17 @@ Your database will be PSQL, this will be interacted with using node-postgres.
 
 #### Creating .env files ####
 You will need to create two .env files for your project: .env.test and .env.development. 
-<br>Into .env.test add PGDATABASE=<nc_news_test>
-<br>Into .env.development add PGDATABASE=<nc_news>
-__Please ensure that these .env files are .gitignored.__ 
+<br>Into .env.test add PGDATABASE=nc_news_test
+<br>Into .env.development add PGDATABASE=nc_news
+<p>__Please ensure that these .env files are .gitignored.__</p>
 
-This project requires several node dependicies listed in the package-lock.json/package.json files. After the env files are created run npm install.
+This project requires several node dependicies listed in the package-lock.json/package.json files. After the env files are created run __npm install__.
 
 #### Creating the databases ####
 We'll have two databases in this project: one for development data, and another for simpler test data.
 Seeding data is provided:
-run setup.sql file to create the databases 
-- -psql -f ./db/setup.sql
-run run-seed.js 
-- node ./db/seeds/run-seed.js
+- run setup.sql file to create the databases 
+- run run-seed.js 
 
 The developer database should be populated at the start.
 The test database should be set up to reseed before each test is run.
@@ -35,7 +33,7 @@ The test database should be set up to reseed before each test is run.
 This project uses jest, jest-sorted and supertest for testing. 
 Packages will be installed as dev dependencies as part of the initial setup of this project.
 
-<p>Tests can be ran by running npm t seed.</p>
+<p>Tests can be run by running npm t seed.</p>
 
 #### Minimum Versions Needed ####
 This project requires:
