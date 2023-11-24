@@ -1,27 +1,14 @@
 const express = require("express");
-const { getTopics, listApis, getArticles, listComments, getArticleById, updateArticleById, getUsers, postComment, deleteComment } = require("./controllers/controllers");
+const { listApis } = require("./controllers/controllers");
 const { handleSqlErrors, handleCustomErrors, handleServerErrors } = require("./errors");
+const apiRouter = require("./routes/api-router.js");
 
 const app = express();
 app.use(express.json());
+app.use('/api', apiRouter);
 
-app.get('/api/topics', getTopics)
 
-app.get('/api/articles/:article_id', getArticleById)
-
-app.get('/api', listApis)
-
-app.get('/api/articles', getArticles)
-
-app.get('/api/articles/:article_id/comments', listComments)
-
-app.post('/api/articles/:article_id/comments', postComment)
-
-app.delete('/api/comments/:comment_id', deleteComment)
-
-app.patch('/api/articles/:article_id', updateArticleById)
-
-app.get('/api/users', getUsers)
+app.get('/api', listApis);
 
 app.all("*", (req, res) => {
     res.status(404).send({ msg: "path not found" });
