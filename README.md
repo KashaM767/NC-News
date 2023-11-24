@@ -51,3 +51,9 @@ test should also be set to jest in scripts
 ```json
  "test": "jest",
 ```
+Tests can be ran by running npm t seed
+
+#### Minimum Versions Needed ####
+This project requires:
+8.11.3 and upwards for postgres
+6.0.0 and upwards for node
