@@ -16,7 +16,8 @@ Your database will be PSQL, this will be interacted with using node-postgres.
 You will need to create two .env files for your project: .env.test and .env.development. 
 <br>Into .env.test add PGDATABASE=nc_news_test
 <br>Into .env.development add PGDATABASE=nc_news
-<p>__Please ensure that these .env files are .gitignored.__</p>
+
+__Please ensure that .env files are .gitignored__
 
 This project requires several node dependicies listed in the package-lock.json/package.json files. After the env files are created run __npm install__.
 
