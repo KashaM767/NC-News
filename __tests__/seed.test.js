@@ -124,6 +124,17 @@ describe('GET /api/articles/:article_id', () => {
                     })
             })
     });
+    test('200: correct comment_count value should be added', () => {
+        return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.article).toMatchObject(
+                    {
+                        comment_count: 11
+                    })
+            })
+    });
     test("404: responds with an error message if the article_id does not exist", () => {
         return request(app)
             .get('/api/articles/26')

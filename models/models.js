@@ -18,7 +18,7 @@ exports.retrieveTopics = () => {
 };
 
 exports.retrieveArticleById = (article_id) => {
-    return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
+    return db.query(`SELECT a.*, CAST(COUNT(c.body) AS int) AS comment_count FROM articles a LEFT OUTER JOIN comments c ON c.article_id = a.article_id WHERE a.article_id = $1 GROUP BY a.article_id;`, [article_id])
         .then(({ rows }) => {
             if (!rows.length) {
                 return Promise.reject({ status: 404, msg: 'not found' });
@@ -26,6 +26,7 @@ exports.retrieveArticleById = (article_id) => {
             return rows[0]
         })
 }
+
 exports.readAllApis = () => {
     return fs.readFile(`${__dirname}/../endpoints.json`, 'utf-8')
         .then((data) => {
