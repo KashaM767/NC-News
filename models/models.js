@@ -37,7 +37,7 @@ exports.readAllApis = () => {
 
 exports.retrieveArticles = (topic) => {
 
-    let queryString = "select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, count(c.body) as comment_count from articles a left outer join comments c on c.article_id = a.article_id "
+    let queryString = "select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, cast(count(c.body) as int) as comment_count from articles a left outer join comments c on c.article_id = a.article_id "
     const queryValues = [];
 
     if (topic) {
