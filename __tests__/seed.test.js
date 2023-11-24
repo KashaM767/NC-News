@@ -89,6 +89,13 @@ describe('GET /api/articles/?topic', () => {
                 })
             })
     });
+    test('200: sends an empty array if topic exists but has no articles', () => {
+        return request(app).get('/api/articles?topic=paper')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.articles).toEqual([])
+            })
+    });
     test('404: sends an error message if topic is invalid', () => {
         return request(app).get('/api/articles?topic=banana')
             .expect(404)
