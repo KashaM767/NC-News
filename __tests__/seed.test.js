@@ -12,11 +12,8 @@ afterAll(() => db.end());
 
 describe('GET /api/topics', () => {
     test('GET:200 sends a 200 status code and array of topics to the client', () => {
-
         return request(app)
-
             .get('/api/topics')
-
             .expect(200).then(({ body }) => {
                 expect(body.topics.length).toBe(3);
                 expect(body.topics[0]).toMatchObject({
@@ -75,6 +72,53 @@ describe('GET /api/articles', () => {
                     })
                 });
             });
+    });
+});
+
+describe('GET /api/articles?sort_by', () => {
+    test('200: returns an array of article objects sorted by valid column', () => {
+        return request(app).get('/api/articles?sort_by=title')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("title", {
+                    descending: true
+                });
+            })
+    });
+    test('400: sends an error message when given an invalid query', () => {
+        return request(app).get('/api/articles?sort_by=banana')
+            .expect(400).then(({ body }) => {
+                expect(body.msg).toBe('bad request');
+            })
+    })
+});
+describe('GET /api/articles?order_by', () => {
+    test('200: returns an array of articles, can be ordered either ascending or descending', () => {
+        return request(app).get('/api/articles?order=asc')
+            .expect(200).then(({ body }) => {
+                expect(body.articles.length).toBe(13);
+                expect(body.articles).toBeSortedBy("created_at");
+            })
+    });
+    test('400: sends an error message when given an invalid query', () => {
+        return request(app).get('/api/articles?order=banana')
+            .expect(400).then(({ body }) => {
+                expect(body.msg).toBe('bad request');
+            })
+    })
+});
+
+describe('GET /api/articles?', () => {
+    test('200: accepts a combination of queries', () => {
+        return request(app).get('/api/articles?topic=mitch&sort_by=author&order=asc')
+            .expect(200).then(({ body }) => {
+                expect(body.articles.length).toBe(12);
+                body.articles.forEach((article) => {
+                    expect(article.topic).toBe("mitch");
+                })
+                expect(body.articles).toBeSortedBy("author");
+            })
     });
 });
 

@@ -3,7 +3,6 @@ const fs = require('fs/promises');
 const { checkExists } = require('./comments');
 const articles = require('../db/data/test-data/articles');
 
-
 exports.selectApis = () => {
     return fs.readFile('./endpoints.json', 'utf-8')
         .then((data) => {
@@ -11,7 +10,6 @@ exports.selectApis = () => {
             return parsedData;
         });
 };
-
 
 exports.retrieveTopics = () => {
     return db.query("SELECT * FROM topics;").then(({ rows }) => {
@@ -37,7 +35,17 @@ exports.readAllApis = () => {
         });
 };
 
-exports.retrieveArticles = (topic) => {
+exports.retrieveArticles = (topic, sort_by = "created_at", order = "desc") => {
+
+    const validSortingCriteria = ["article_id", "title", "topic", "author", "created_at", "votes", "comment_count"];
+    if (!validSortingCriteria.includes(sort_by)) {
+        return Promise.reject({ status: 400, msg: 'bad request' });
+    }
+
+    const validOrderCriteria = ["asc", "desc"];
+    if (!validOrderCriteria.includes(order)) {
+        return Promise.reject({ status: 400, msg: 'bad request' });
+    }
 
     let queryString = "select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, cast(count(c.body) as int) as comment_count from articles a left outer join comments c on c.article_id = a.article_id "
     const queryValues = [];
@@ -47,12 +55,13 @@ exports.retrieveArticles = (topic) => {
         queryString += `WHERE topic = $1 `;
     }
 
-    queryString += "group by a.article_id order by a.created_at desc;"
+    queryString += `group by a.article_id ORDER BY ${sort_by} ${order}`;
 
     return db.query(queryString, queryValues).then(({ rows }) => {
         return rows
     })
 };
+
 exports.commentsByArticle = (article_id) => {
     return db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC;`, [article_id])
         .then(({ rows }) => {

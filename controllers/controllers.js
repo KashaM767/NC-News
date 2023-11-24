@@ -16,8 +16,8 @@ exports.listApis = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-    const { topic } = req.query;
-    const topicPromises = [retrieveArticles(topic)]
+    const { topic, sort_by, order } = req.query;
+    const topicPromises = [retrieveArticles(topic, sort_by, order)]
 
     if (topic) {
         topicPromises.push(checkExists("topics", "slug", topic));
