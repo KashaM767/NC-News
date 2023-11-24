@@ -18,7 +18,6 @@ describe('GET /api/topics', () => {
             .get('/api/topics')
 
             .expect(200).then(({ body }) => {
-                console.log(body)
                 expect(body.topics.length).toBe(3);
                 expect(body.topics[0]).toMatchObject({
                     slug: 'mitch',
@@ -167,7 +166,6 @@ describe('GET /api/articles/:article_id/comments', () => {
         return request(app).get('/api/articles/3/comments')
             .expect(200)
             .then(({ body }) => {
-                console.log(body)
                 expect(body.comments.length).toBe(2);
                 expect(body.comments).toBeSortedBy("created_at", {
                     descending: true
@@ -365,8 +363,8 @@ describe('GET /api/users', () => {
         return request(app).get('/api/users')
             .expect(200)
             .then(({ body }) => {
-                expect(body.users.rows.length).toBe(4);
-                body.users.rows.forEach((user) => {
+                expect(body.users.length).toBe(4);
+                body.users.forEach((user) => {
                     expect(user).toMatchObject({
                         username: expect.any(String),
                         name: expect.any(String),

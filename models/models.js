@@ -86,6 +86,8 @@ exports.updateArticle = (article_id, input) => {
 }
 
 exports.retrieveUsers = () => {
-    return db.query("SELECT * FROM users;");
+    return db.query("SELECT * FROM users;").then(({ rows }) => {
+        return rows
+    })
 };
 
