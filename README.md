@@ -13,9 +13,10 @@ To replicate this project:
 Your database will be PSQL, this will be interacted with using node-postgres.
 
 #### Creating .env files ####
-You will need to create two .env files for your project: .env.test and .env.development. Into each, 
-add PGDATABASE=<>
-with the relevent database name for that environment. __Please ensure that these .env files are .gitignored.__ 
+You will need to create two .env files for your project: .env.test and .env.development. 
+<br>Into .env.test add PGDATABASE=<nc_news_test>
+<br>Into .env.development add PGDATABASE=<nc_news>
+__Please ensure that these .env files are .gitignored.__ 
 
 This project requires several node dependicies listed in the package-lock.json/package.json files. After the env files are created run npm install.
 
@@ -32,28 +33,9 @@ The test database should be set up to reseed before each test is run.
 
 #### Running Tests ####
 This project uses jest, jest-sorted and supertest for testing. 
-Packages will be installed as dev dependencies.
+Packages will be installed as dev dependencies as part of the initial setup of this project.
 
-- npm install --save-dev jest
-- npm install --save-dev jest-sorted
-- npm install supertest --save-dev
-
-package.json file
-jest-sorted should be added to the package.json file
-test should also be set to jest in scripts
-
-```json 
-  "jest": {
-    "setupFilesAfterEnv": [
-      "jest-sorted"
-    ]
-  }
-```
-
-```json
- "test": "jest",
-```
-Tests can be ran by running npm t seed.
+<p>Tests can be ran by running npm t seed.</p>
 
 #### Minimum Versions Needed ####
 This project requires:
