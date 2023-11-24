@@ -34,8 +34,19 @@ exports.readAllApis = () => {
         });
 };
 
-exports.retrieveArticles = () => {
-    return db.query("select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, count(c.body) as comment_count from articles a left outer join comments c on c.article_id = a.article_id group by a.article_id order by a.created_at desc;").then(({ rows }) => {
+exports.retrieveArticles = (topic) => {
+
+    let queryString = "select a.article_id, a.article_img_url, a.author, a.created_at, a.title, a.topic, a.votes, count(c.body) as comment_count from articles a left outer join comments c on c.article_id = a.article_id "
+    const queryValues = [];
+
+    if (topic) {
+        queryValues.push(topic);
+        queryString += `WHERE topic = $1 `;
+    }
+
+    queryString += "group by a.article_id order by a.created_at desc;"
+
+    return db.query(queryString, queryValues).then(({ rows }) => {
         return rows
     })
 };

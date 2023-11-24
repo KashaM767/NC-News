@@ -75,6 +75,36 @@ describe('GET /api/articles', () => {
     });
 });
 
+describe('GET /api/articles/?topic', () => {
+    test('200: filters the articles by the topic value specified in the query.', () => {
+        return request(app).get('/api/articles?topic=mitch')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.articles).toBeSortedBy("created_at", {
+                    descending: true
+                });
+                expect(body.articles.length).toBe(12);
+                body.articles.forEach((article) => {
+                    expect(article.topic).toBe('mitch')
+                })
+            })
+    });
+    test('200: sends an empty array if topic exists but has no articles', () => {
+        return request(app).get('/api/articles?topic=paper')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.articles).toEqual([])
+            })
+    });
+    test('404: sends an error message if topic is invalid', () => {
+        return request(app).get('/api/articles?topic=banana')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
+});
+
 describe('GET /api/articles/:article_id', () => {
     test('GET:200 sends a single article to the client', () => {
         return request(app)
@@ -110,7 +140,7 @@ describe('GET /api/articles/:article_id', () => {
     });
 });
 
-describe('/api/articles/:article_id/comments', () => {
+describe('GET /api/articles/:article_id/comments', () => {
     test("200: returns an empty array if no comments for the given article_id", () => {
         return request(app).get('/api/articles/2/comments')
             .expect(200)
@@ -238,7 +268,7 @@ describe('POST /api/articles/:article_id/comments', () => {
     });
 });
 
-describe('/api/comments/:comment_id', () => {
+describe('DELETE /api/comments/:comment_id', () => {
     test('204: deletes requested comment by comment_id returns 204', () => {
         return request(app).delete('/api/comments/5')
             .expect(204)
@@ -330,3 +360,4 @@ describe('GET /api/users', () => {
             });
     });
 })
+
