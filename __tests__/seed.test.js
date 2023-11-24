@@ -90,8 +90,18 @@ describe('GET /api/articles/:article_id', () => {
                         body: 'I find this existence challenging',
                         created_at: "2020-07-09T20:11:00.000Z",
                         votes: 100,
-                        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
-                        comment_count: "11"
+                        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+                    })
+            })
+    });
+    test('200: correct comment_count value should be added', () => {
+        return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.article).toMatchObject(
+                    {
+                        comment_count: 11
                     })
             })
     });
