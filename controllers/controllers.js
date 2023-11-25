@@ -1,7 +1,7 @@
 const articles = require("../db/data/test-data/articles");
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment } = require("../models/models");
+const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
@@ -80,6 +80,12 @@ exports.updateArticleById = (req, res, next) => {
 exports.getUsers = (req, res, next) => {
     retrieveUsers().then((rows) => {
         res.status(200).send({ users: rows })
-    })
+    }).catch(next)
 };
 
+exports.getByUsername = (req, res, next) => {
+    const { username } = req.params;
+    retrieveByUsername(username).then((rows) => {
+        res.status(200).send({ user: rows })
+    }).catch(next)
+};

@@ -346,6 +346,7 @@ describe('DELETE /api/comments/:comment_id', () => {
             })
     });
 });
+
 describe('PATCH /api/articles/:article_id', () => {
     test("200 update an article by article_id and responds with the updated article ", () => {
         const input = {
@@ -419,3 +420,27 @@ describe('GET /api/users', () => {
     });
 })
 
+describe('GET /api/users/:username', () => {
+    test('200: returns object contining a single user', () => {
+        return request(app)
+            .get('/api/users/icellusedkars')
+            .expect(200)
+            .then(({ body }) => {
+                expect(body.user).toMatchObject(
+                    {
+                        username: 'icellusedkars',
+                        name: 'sam',
+                        avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4'
+                    }
+                )
+            })
+    });
+    test("404: responds with an error message if the username does not exist", () => {
+        return request(app)
+            .get('/api/users/parrotfish')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.msg).toBe("not found")
+            })
+    });
+});
