@@ -114,5 +114,16 @@
         "avatar_url": "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4"
       }
     }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "update the votes on a comment given the comment's comment_id returns the updated comment"
+  },
+  "queries": [],
+  "exampleResponse": {
+    "body": "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+    "votes": 24,
+    "author": "butter_bridge",
+    "article_id": 1,
+    "created_at": "1604113380000"
   }
 }
