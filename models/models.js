@@ -1,6 +1,6 @@
 const db = require('../db/connection');
 const fs = require('fs/promises');
-const { checkExists } = require('./comments');
+const { checkExists } = require('./checkExists');
 const articles = require('../db/data/test-data/articles');
 
 exports.selectApis = () => {
@@ -83,6 +83,18 @@ exports.insertComment = (newComment, article_id) => {
             return rows[0]
         })
 }
+
+exports.updateCommentVotes = (comment_id, input) => {
+    const updateVotes = Object.values(input)[0]
+    return db.query(`UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`, [updateVotes, comment_id])
+        .then(({ rows }) => {
+            if (!rows.length) {
+                return Promise.reject({ status: 404, msg: 'not found' });
+            }
+            return (rows[0])
+        })
+}
+
 exports.updateArticle = (article_id, input) => {
     const alterVotes = Object.values(input)[0]
     return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`, [alterVotes, article_id])

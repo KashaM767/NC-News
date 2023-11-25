@@ -444,3 +444,59 @@ describe('GET /api/users/:username', () => {
             })
     });
 });
+
+describe('PATCH /api/comments/:commnent_id', () => {
+    test("200 update an comment by comment_id and responds with the updated comment", () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/comments/2')
+            .expect(200)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.comment.votes).toEqual(44)
+            })
+    });
+    test("200 can increase and decrease a comment's vote total by comment_id and responds with the updated comment", () => {
+        const input = {
+            inc_votes: -10
+        };
+        return request(app).patch('/api/comments/3')
+            .expect(200)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.comment.votes).toEqual(90)
+            })
+    });
+    test('404 returns an error message if comment_id is valid but not found', () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/comments/66')
+            .expect(404)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
+    test('400 returns an error message if comment_id is invalid', () => {
+        const input = {
+            inc_votes: 30
+        };
+        return request(app).patch('/api/comments/banana')
+            .expect(400)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.msg).toBe('bad request');
+            })
+    });
+    test('400 for invalid inc_votes value', () => {
+        const input = { inc_votes: 'banana' };
+        return request(app).patch('/api/comments/4')
+            .expect(400)
+            .send(input)
+            .then(({ body }) => {
+                expect(body.msg).toBe("bad request");
+            });
+    });
+});

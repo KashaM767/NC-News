@@ -1,7 +1,7 @@
 const articles = require("../db/data/test-data/articles");
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
-const { checkExists } = require("../models/comments");
-const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername } = require("../models/models");
+const { checkExists } = require("../models/checkExists");
+const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername, updateCommentVotes } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
@@ -89,3 +89,10 @@ exports.getByUsername = (req, res, next) => {
         res.status(200).send({ user: rows })
     }).catch(next)
 };
+
+exports.patchCommentVotes = (req, res, next) => {
+    const { comment_id } = req.params;
+    updateCommentVotes(comment_id, req.body).then((rows) => {
+        res.status(200).send({ comment: rows })
+    }).catch(next)
+}
