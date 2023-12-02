@@ -603,3 +603,60 @@ describe('POST /api/articles', () => {
             })
     });
 });
+
+describe('POST /api/topics', () => {
+    test('201: adds a new topic and responds with an object for the new topic', () => {
+        const newTopic = {
+            "slug": "gaming",
+            "description": "news about gaming"
+        };
+        return request(app)
+            .post('/api/topics')
+            .send(newTopic)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.topic.slug).toBe("gaming");
+                expect(body.topic.description).toBe("news about gaming");
+            })
+    });
+    test('201: Ignores any unnecessary properties on the request body.', () => {
+        const newTopic = {
+            "slug": "gaming",
+            "description": "news about gaming",
+            "currently playing": "Metroid Prime"
+        };
+        return request(app)
+            .post('/api/topics')
+            .send(newTopic)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.topic.slug).toBe("gaming");
+                expect(body.topic.description).toBe("news about gaming");
+            })
+    });
+    test('400 responds with an appropriate status and error message when missing required field', () => {
+        const newTopic = {
+            "description": "news about gaming",
+        };
+        return request(app)
+            .post('/api/topics')
+            .send(newTopic)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe('bad request');
+            });
+    });
+    test('400: responds with an error message if topic already exists', () => {
+        const newTopic = {
+            slug: 'cats',
+            description: 'felines'
+        };
+        return request(app)
+            .post('/api/topics')
+            .send(newTopic)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("already exists");
+            });
+    });
+});

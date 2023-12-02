@@ -1,7 +1,7 @@
 const articles = require("../db/data/test-data/articles");
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/checkExists");
-const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername, updateCommentVotes, addArticle } = require("../models/models");
+const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername, updateCommentVotes, addArticle, addTopic } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
@@ -102,5 +102,12 @@ exports.postArticle = (req, res, next) => {
     addArticle(newArticle).then((rows) => {
         rows.comment_count = 0;
         res.status(201).send({ article: rows })
+    }).catch(next)
+}
+
+exports.postTopic = (req, res, next) => {
+    const newTopic = req.body;
+    addTopic(newTopic).then((rows) => {
+        res.status(201).send({ topic: rows })
     }).catch(next)
 }
