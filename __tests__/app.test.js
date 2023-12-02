@@ -500,3 +500,106 @@ describe('PATCH /api/comments/:commnent_id', () => {
             });
     });
 });
+
+describe('POST /api/articles', () => {
+    test('201: adds a new article to articles and responds with the posted article', () => {
+        const newArticle = {
+            title: "G",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "Great hair!",
+            article_img_url:
+                "https://images.unsplash.com/photo-1627843221135-995cc6e9f723?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        };
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.article.article_id).toBe(14);
+                expect(body.article.title).toBe('G');
+                expect(body.article.topic).toBe('mitch');
+                expect(body.article.author).toBe('butter_bridge');
+                expect(body.article.body).toBe('Great hair!');
+                expect(body.article.created_at).toEqual(expect.any(String));
+                expect(body.article.votes).toBe(0);
+                expect(body.article.article_img_url).toBe('https://images.unsplash.com/photo-1627843221135-995cc6e9f723?q=80&w=3174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                expect(body.article.comment_count).toBe(0);
+            })
+    });
+    test('201: adds a default image URL if not provided with one', () => {
+        const newArticle = {
+            title: "G",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "Great hair!"
+        };
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.article.article_id).toBe(14);
+                expect(body.article.title).toBe('G');
+                expect(body.article.topic).toBe('mitch');
+                expect(body.article.author).toBe('butter_bridge');
+                expect(body.article.body).toBe('Great hair!');
+                expect(body.article.created_at).toEqual(expect.any(String));
+                expect(body.article.votes).toBe(0);
+                expect(body.article.article_img_url).toBe('https://images.unsplash.com/photo-1586339949216-35c2747cc36d?q=80&w=2666&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                expect(body.article.comment_count).toBe(0);
+            })
+    });
+    test('201: Ignores any unnecessary properties on the request body.', () => {
+        const newArticle = {
+            title: "G",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "Great hair!",
+            contact: "bb@gmail.com"
+        };
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(201)
+            .then(({ body }) => {
+                expect(body.article.article_id).toBe(14);
+                expect(body.article.title).toBe('G');
+                expect(body.article.topic).toBe('mitch');
+                expect(body.article.author).toBe('butter_bridge');
+                expect(body.article.body).toBe('Great hair!');
+                expect(body.article.created_at).toEqual(expect.any(String));
+                expect(body.article.votes).toBe(0);
+                expect(body.article.article_img_url).toBe('https://images.unsplash.com/photo-1586339949216-35c2747cc36d?q=80&w=2666&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                expect(body.article.comment_count).toBe(0);
+            })
+    });
+    test('400 responds with an appropriate status and error message when missing required field', () => {
+        const newArticle = {
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "Great hair!",
+        };
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe('bad request');
+            });
+    });
+    test('404: responds with an error message if username does not exist', () => {
+        const newArticle = {
+            title: "G",
+            topic: "mitch",
+            author: "joe99",
+            body: "Great hair!",
+        };
+        return request(app)
+            .post('/api/articles')
+            .send(newArticle)
+            .then(({ body }) => {
+                expect(body.msg).toBe('not found');
+            })
+    });
+});

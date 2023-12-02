@@ -121,3 +121,11 @@ exports.retrieveByUsername = (username) => {
             return rows[0]
         })
 };
+
+exports.addArticle = (newArticle) => {
+    const { title, topic, author, body, article_img_url = "https://images.unsplash.com/photo-1586339949216-35c2747cc36d?q=80&w=2666&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" } = newArticle;
+    return db.query(`INSERT INTO articles (title, topic, author, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *`, [title, topic, author, body, article_img_url])
+        .then(({ rows }) => {
+            return rows[0]
+        })
+};
