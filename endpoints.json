@@ -126,6 +126,11 @@
     "article_id": 1,
     "created_at": "1604113380000"
   },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the given comment by comment_id responds with status 204 and no content.",
+    "queries": [],
+    "exampleResponse": {}
+  },
   "POST /api/articles": {
     "description": "adds a new article to articles and responds with the posted article",
     "queries": [],
@@ -148,5 +153,10 @@
       "slug": "gaming",
       "description": "news about gaming"
     }
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "deletes requested article and associated comments by article_id returns 204 and no content",
+    "queries": [],
+    "exampleResponse": {}
   }
 }

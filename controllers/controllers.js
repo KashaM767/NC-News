@@ -1,7 +1,7 @@
 const articles = require("../db/data/test-data/articles");
 const { topicData, articleData, userData, commentData } = require("../db/data/test-data/index");
 const { checkExists } = require("../models/checkExists");
-const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername, updateCommentVotes, addArticle, addTopic } = require("../models/models");
+const { retrieveTopics, readAllApis, retrieveArticles, insertComment, commentsByArticle, retrieveArticleById, updateArticle, retrieveUsers, removeComment, retrieveByUsername, updateCommentVotes, addArticle, addTopic, removeArticle } = require("../models/models");
 
 exports.getTopics = (req, res, next) => {
     retrieveTopics()
@@ -109,5 +109,16 @@ exports.postTopic = (req, res, next) => {
     const newTopic = req.body;
     addTopic(newTopic).then((rows) => {
         res.status(201).send({ topic: rows })
+    }).catch(next)
+}
+
+exports.deleteArticle = (req, res, next) => {
+    const { article_id } = req.params;
+    removeArticle(article_id).then((article) => {
+        if (article.rowCount === 0) {
+            res.status(404).send({ msg: 'not found' })
+        } else {
+            res.status(204).send()
+        }
     }).catch(next)
 }

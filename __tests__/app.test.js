@@ -660,3 +660,44 @@ describe('POST /api/topics', () => {
             });
     });
 });
+
+describe('DELETE /api/articles/:article_id', () => {
+    test('204: deletes requested article by article_id returns 204', () => {
+        return request(app).delete('/api/articles/2')
+            .expect(204)
+    });
+    test('204: deletes comments associated with article', () => {
+        return request(app).delete('/api/articles/1')
+            .expect(204)
+            .then(() => {
+                return request(app).get('/api/articles/1/comments')
+            })
+            .then(({ body }) => {
+                expect(body.msg).toBe('not found')
+            })
+    });
+    test('204: only deletes comments associated with article', () => {
+        return request(app).delete('/api/articles/1')
+            .expect(204)
+            .then(() => {
+                return request(app).get('/api/articles/3/comments')
+            })
+            .then(({ body }) => {
+                expect(body.comments.length).toBe(2)
+            })
+    });
+    test('404: returns an error message if article_id is valid but not found', () => {
+        return request(app).delete('/api/articles/62')
+            .expect(404)
+            .then((res) => {
+                expect(res.body.msg).toBe('not found');
+            })
+    });
+    test('400 returns an error message if article_id is invalid', () => {
+        return request(app).delete('/api/articles/banana')
+            .expect(400)
+            .then((res) => {
+                expect(res.body.msg).toBe('bad request');
+            })
+    });
+});
